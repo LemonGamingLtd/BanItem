@@ -422,7 +422,7 @@ public final class BanUtils {
         final ItemStack helmet = ee.getHelmet();
         if (!Utils.isNullOrAir(helmet) && pl.getApi().isBanned(p, p.getLocation(), helmet, primaryThread, BanAction.WEAR)) {
             if (!primaryThread) {
-                Bukkit.getScheduler().runTask(pl, () -> checkPlayerArmors(p));
+                pl.getScheduler().runTask(() -> checkPlayerArmors(p));
                 return;
             }
 
@@ -433,7 +433,7 @@ public final class BanUtils {
         final ItemStack chestplate = ee.getChestplate();
         if (!Utils.isNullOrAir(chestplate) && pl.getApi().isBanned(p, p.getLocation(), chestplate, primaryThread, BanAction.WEAR)) {
             if (!primaryThread) {
-                Bukkit.getScheduler().runTask(pl, () -> checkPlayerArmors(p));
+                pl.getScheduler().runTask(() -> checkPlayerArmors(p));
                 return;
             }
             giveItemBack(p, chestplate);
@@ -443,7 +443,7 @@ public final class BanUtils {
         final ItemStack leggings = ee.getLeggings();
         if (!Utils.isNullOrAir(leggings) && pl.getApi().isBanned(p, p.getLocation(), leggings, primaryThread, BanAction.WEAR)) {
             if (!primaryThread) {
-                Bukkit.getScheduler().runTask(pl, () -> checkPlayerArmors(p));
+                pl.getScheduler().runTask(() -> checkPlayerArmors(p));
                 return;
             }
             giveItemBack(p, leggings);
@@ -453,7 +453,7 @@ public final class BanUtils {
         final ItemStack boots = ee.getBoots();
         if (!Utils.isNullOrAir(boots) && pl.getApi().isBanned(p, p.getLocation(), boots, primaryThread, BanAction.WEAR)) {
             if (!primaryThread) {
-                Bukkit.getScheduler().runTask(pl, () -> checkPlayerArmors(p));
+                pl.getScheduler().runTask(() -> checkPlayerArmors(p));
                 return;
             }
             giveItemBack(p, boots);
@@ -482,7 +482,7 @@ public final class BanUtils {
             if (item.getAmount() > maxStack) {
                 // Illegal stack!
                 if (!Bukkit.isPrimaryThread()) {
-                    Bukkit.getScheduler().runTask(pl, () -> checkPlayerIllegalStacks(p));
+                    pl.getScheduler().runTask(() -> checkPlayerIllegalStacks(p));
                     return;
                 }
 

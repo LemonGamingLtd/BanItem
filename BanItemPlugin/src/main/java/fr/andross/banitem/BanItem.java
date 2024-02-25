@@ -35,12 +35,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import me.nahu.scheduler.wrapper.FoliaWrappedJavaPlugin;
+import me.nahu.scheduler.wrapper.runnable.WrappedRunnable;
+import me.nahu.scheduler.wrapper.WrappedScheduler;
+import me.nahu.scheduler.wrapper.WrappedSchedulerBuilder;
+
 /**
  * BanItemPlugin
  * @version 3.4
  * @author Andross
  */
-public final class BanItem extends JavaPlugin {
+public final class BanItem extends FoliaWrappedJavaPlugin {
     private static BanItem instance;
     private BanItemAPI api;
     private BanConfig banConfig;
@@ -53,19 +58,20 @@ public final class BanItem extends JavaPlugin {
     public void onEnable() {
         instance = this;
         api = new BanItemAPI(this);
-        Bukkit.getScheduler().runTaskLater(this, () -> {
+        final WrappedScheduler scheduler = getScheduler(); // Scheduler ready, WOW!
+        scheduler.runTaskLater(() -> {
             if (!isEnabled()) return;
-
+        
             // Metrics
             new Metrics(this, 7822);
-
+        
             // Loading plugin on next tick after worlds
             load(Bukkit.getConsoleSender(), null);
-
+        
             // Update checker
             if (banConfig.getConfig().getBoolean("check-update"))
-                Bukkit.getScheduler().runTaskAsynchronously(this, utils::checkForUpdate);
-        }, 20L);
+                scheduler.runTaskAsynchronously(utils::checkForUpdate);
+        }, 20L);        
     }
 
     /**
@@ -80,7 +86,7 @@ public final class BanItem extends JavaPlugin {
         // Removing all tasks
         utils.getWearScanner().setEnabled(false);
         utils.getIllegalStackScanner().setEnabled(false);
-        getServer().getScheduler().cancelTasks(this);
+        getScheduler().cancelAllTasks();
 
         // (re)Loading config
         banConfig = new BanConfig(this, sender, configFile);

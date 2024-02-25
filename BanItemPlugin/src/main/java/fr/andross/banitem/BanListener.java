@@ -173,7 +173,7 @@ public final class BanListener {
                     if (Utils.isNullOrAir(item)) items.add(null);
                     else items.add(item.clone());
                 }
-                Bukkit.getScheduler().runTask(pl, () -> {
+                pl.getScheduler().runTask(() -> {
                     final BrewerInventory inv = e.getContents();
                     for (int i = 0; i < 3; i++) {
                         final ItemStack item = inv.getItem(i);
@@ -337,7 +337,7 @@ public final class BanListener {
                     }
 
                     // Checking also on next tick
-                    Bukkit.getScheduler().runTask(pl, () -> {
+                    pl.getScheduler().runTask(() -> {
                         final ItemStack item2 = e.getInventory().getItem(0);
                         if (item2 == null) return;
                         final ItemStack addedItem2 = e.getInventory().getItem(1);
@@ -421,7 +421,7 @@ public final class BanListener {
                         p.setSneaking(true);
 
                         // Removing the elytra from player Inventory, to prevent any glitch
-                        Bukkit.getScheduler().runTask(pl, () -> {
+                        pl.getScheduler().runTask(() -> {
                             if (!p.isOnline()) return;
                             p.setGliding(false);
                             p.setSneaking(true);
@@ -938,14 +938,14 @@ public final class BanListener {
 
                 // Armor interaction?
                 if (e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
-                    Bukkit.getScheduler().runTask(pl, () -> pl.getUtils().checkPlayerArmors((Player) e.getWhoClicked()));
+                    pl.getScheduler().runTask(() -> pl.getUtils().checkPlayerArmors((Player) e.getWhoClicked()));
                     return;
                 }
 
                 // Trying to shift click item to armor?
                 final ItemStack currentItem = e.getCurrentItem();
                 if (e.isShiftClick() && !Utils.isNullOrAir(currentItem)) {
-                    Bukkit.getScheduler().runTask(pl, () -> pl.getUtils().checkPlayerArmors((Player) e.getWhoClicked()));
+                    pl.getScheduler().runTask(() -> pl.getUtils().checkPlayerArmors((Player) e.getWhoClicked()));
                     return;
                 }
 
@@ -953,13 +953,13 @@ public final class BanListener {
                 if (e.getRawSlot() >= 5 && e.getRawSlot() <= 8 && e.getHotbarButton() > -1) {
                     final ItemStack item = e.getView().getBottomInventory().getItem(e.getHotbarButton());
                     if (!Utils.isNullOrAir(item))
-                        Bukkit.getScheduler().runTask(pl, () -> pl.getUtils().checkPlayerArmors((Player) e.getWhoClicked()));
+                        pl.getScheduler().runTask(() -> pl.getUtils().checkPlayerArmors((Player) e.getWhoClicked()));
                 }
             }, priority.contains(BanAction.WEAR));
 
             registerEvent(PlayerChangedWorldEvent.class, (li, event) -> {
                 final PlayerChangedWorldEvent e = (PlayerChangedWorldEvent) event;
-                Bukkit.getScheduler().runTask(pl, () -> pl.getUtils().checkPlayerArmors(e.getPlayer()));
+                pl.getScheduler().runTask(() -> pl.getUtils().checkPlayerArmors(e.getPlayer()));
             }, priority.contains(BanAction.WEAR));
 
             if (pl.getBanConfig().getConfig().getBoolean("actions.wear.region-check") && pl.getHooks().isWorldGuardEnabled()) {
@@ -981,7 +981,7 @@ public final class BanListener {
 
                     registerEvent(PlayerRegionChangeEvent.class, (li, event) -> {
                         final PlayerRegionChangeEvent e = (PlayerRegionChangeEvent) event;
-                        Bukkit.getScheduler().runTask(pl, () -> pl.getUtils().checkPlayerArmors(e.getPlayer()));
+                        pl.getScheduler().runTask(() -> pl.getUtils().checkPlayerArmors(e.getPlayer()));
                     }, priority.contains(BanAction.WEAR));
                 }
             }

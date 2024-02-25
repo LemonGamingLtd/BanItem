@@ -229,7 +229,7 @@ public final class Blacklist extends HashMap<World, Items> {
 
             // Checking delete?
             if (map.containsKey(BanAction.DELETE))
-                Bukkit.getScheduler().runTask(pl, () -> pl.getUtils().deleteItemFromInventoryView(player));
+                pl.getScheduler().runTask(() -> pl.getUtils().deleteItemFromInventoryView(player));
 
             if (sendMessage) {
                 if (playerCooldown > 0) {
